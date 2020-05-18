@@ -23,6 +23,7 @@ namespace GOTHIC_ENGINE {
 		textureHelp = "ItemMap_Help_G1.tga";	
 #endif // ENGINE >= EngineG2
 
+
 		colors.Insert( zCOLOR( 255, 255, 255 ) );
 		colors.Insert( GetColorFromHex( zoptions->ReadString( "ItemMap", "colorCombat", "#E23D28" ) ) );
 		colors.Insert( GetColorFromHex( zoptions->ReadString( "ItemMap", "colorPotion", "#00BFFF" ) ) );
@@ -32,7 +33,8 @@ namespace GOTHIC_ENGINE {
 		colors.Insert( GetColorFromHex( zoptions->ReadString( "ItemMap", "colorRune", "#FC00FC" ) ) );
 		colors.Insert( GetColorFromHex( zoptions->ReadString( "ItemMap", "colorDocs", "#FCF3B5" ) ) );
 		colors.Insert( GetColorFromHex( zoptions->ReadString( "ItemMap", "colorOther", "#898989" ) ) );
-
+		category = zoptions->ReadInt( "ItemMap", "category", 0 );
+		category = category < 0 ? 0 : category > CATEGORYMAX - 1 ? NPC : category;
 
 		pView = zNEW( zCView )( 0, 0, screen->anx( pixelSize.X ), screen->any( pixelSize.Y ) );
 		pView->InsertBack( texture );
@@ -284,14 +286,23 @@ namespace GOTHIC_ENGINE {
 		vecMapVob += vecMapMin;
 
 		zPOS		ptVobPosition = zPOS( (int)vecMapVob[ VX ], (int)vecMapVob[ VY ] );
-		//ptVobPosition.X -= pixelSize.X / 2;
-		//ptVobPosition.Y -= pixelSize.X / 2;
+		
+		ptVobPosition.X -= pixelSize.X / 2;
+		ptVobPosition.Y -= pixelSize.Y / 2;
+		ptVobPosition.X += 7;
+		ptVobPosition.Y += 7;
+		
+
 		return ptVobPosition;
 #else
 		zPOS ptVobPosition;
 		ptVobPosition.X = ( pViewDocMap->ViewPageMap->PixelSize.X + pViewDocMap->ViewPageMap->PixelPosition.X * 2 ) * 0.5 + pViewDocMap->ViewPageMap->PixelSize.X / ( boxWorld.maxs[ 0 ] - boxWorld.mins[ 0 ] ) * ptVob[ 0 ];
 		ptVobPosition.Y = ( pViewDocMap->ViewPageMap->PixelSize.Y + pViewDocMap->ViewPageMap->PixelPosition.Y * 2 ) * 0.5 - pViewDocMap->ViewPageMap->PixelSize.Y / ( boxWorld.maxs[ 2 ] - boxWorld.mins[ 2 ] ) * ptVob[ 2 ];
 		//ptVobPosition -= zPOS( pViewDocMap->PixelSize.X / 2, pViewDocMap->PixelSize.Y / 2 );
+		ptVobPosition.X -= pixelSize.X / 2;
+		ptVobPosition.Y -= pixelSize.Y / 2;
+		ptVobPosition.X += 7;
+		ptVobPosition.Y += 7;
 		return ptVobPosition;
 #endif // ENGINE >= EngineG2
 		

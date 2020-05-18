@@ -43,6 +43,7 @@ public:
 	zSTRING textureHelp;
 	int update;
 	int category;
+	int currentCategory;
 
 	zCView * pView;
 	zCView * pViewHelp;

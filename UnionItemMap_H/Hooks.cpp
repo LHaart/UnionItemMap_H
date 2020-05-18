@@ -100,6 +100,11 @@ namespace GOTHIC_ENGINE {
 			iMap.Clear();
 		}
 
+		// включение/отключение отображения
+		if ( iMap.nDocID != -1 && zinput->IsBinded( GAME_WEAPON, nKey ) ) {
+			iMap.onScreen = !iMap.onScreen;
+		}
+
 		if ( iMap.onScreen ) {
 			if ( zinput->IsBinded( GAME_STRAFELEFT, nKey ) ) {
 				if ( iMap.value > 0 ) {
@@ -112,6 +117,7 @@ namespace GOTHIC_ENGINE {
 					if ( iMap.value < 0 ) {
 						iMap.value = 0;
 					}
+					zoptions->WriteInt( "ItemMap", "minValue", iMap.value, 30 );
 					iMap.UpdateItems();
 				}
 			}
@@ -122,12 +128,14 @@ namespace GOTHIC_ENGINE {
 				} else {
 					iMap.value++;
 				}
+				zoptions->WriteInt( "ItemMap", "minValue", iMap.value, 30 );
 				iMap.UpdateItems();
 			}
 
 			if ( zinput->IsBinded( GAME_UP, nKey ) ) {
 				if ( iMap.category > 0 ) {
 					iMap.category--;
+					zoptions->WriteInt( "ItemMap", "category", iMap.category, 0 );
 					iMap.UpdateItems();
 				}
 			}
@@ -135,6 +143,7 @@ namespace GOTHIC_ENGINE {
 			if ( zinput->IsBinded( GAME_DOWN, nKey ) ) {
 				if ( iMap.category < ItemMap::ItemCat::CATEGORYMAX - 1 ) {
 					iMap.category++;
+					zoptions->WriteInt( "ItemMap", "category", iMap.category, 0 );
 					iMap.UpdateItems();
 				}
 			}
