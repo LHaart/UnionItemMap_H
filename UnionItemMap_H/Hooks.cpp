@@ -1,5 +1,5 @@
 namespace GOTHIC_ENGINE {
-	ItemMap iMap;
+	ItemMap* iMap;
 
 	//
 	//---------------------------------------------------------------------------------
@@ -15,16 +15,16 @@ namespace GOTHIC_ENGINE {
 		THISCALL( Ivk_oCDocumentManager_SetLevel )( nDocID, strLevel );
 		//cmd << "" << endl;
 
-		iMap.nDocID = nDocID;
-		iMap.strLevel = strLevel;
-		iMap.strLevel.Upper();
+		iMap->nDocID = nDocID;
+		iMap->strLevel = strLevel;
+		iMap->strLevel.Upper();
 
 
 		oCWorld* pGameWorld = dynamic_cast<oCWorld*> ( ogame->GetWorld() );
 		// если имя файла не равно текущему миру, очищаем переменные
-		if ( !( pGameWorld && iMap.strLevel == pGameWorld->GetWorldFilename() ) ) {
-			iMap.nDocID = -1;
-			iMap.strLevel = "";
+		if ( !( pGameWorld && iMap->strLevel == pGameWorld->GetWorldFilename() ) ) {
+			iMap->nDocID = -1;
+			iMap->strLevel = "";
 		}
 	}
 
@@ -42,8 +42,8 @@ namespace GOTHIC_ENGINE {
 	void oCDocumentManager::Show_Union( int nDocID ) {
 		THISCALL( Ivk_oCDocumentManager_Show )( nDocID );
 		// включаем отображение наших дополнений
-		if ( iMap.nDocID == nDocID ) {
-			iMap.onScreen = TRUE;
+		if ( iMap->nDocID == nDocID ) {
+			iMap->onScreen = TRUE;
 		}
 	}
 
@@ -63,9 +63,9 @@ namespace GOTHIC_ENGINE {
 		THISCALL( Ivk_zCViewDraw_Draw )( );
 
 		// ограничиваем вызов, т.к. zCViewDraw::Draw происходит не один раз за тик
-		if ( iMap.onScreen && !iMap.isDraw ) {
-			iMap.Draw();
-			iMap.isDraw = TRUE;
+		if ( iMap->onScreen && !iMap->isDraw ) {
+			iMap->Draw();
+			iMap->isDraw = TRUE;
 		}
 	}
 
@@ -97,54 +97,54 @@ namespace GOTHIC_ENGINE {
 
 			this->SetEnableHandleEvent( FALSE );
 
-			iMap.Clear();
+			iMap->Clear();
 		}
 
 		// включение/отключение отображения
-		if ( iMap.nDocID != -1 && zinput->IsBinded( GAME_WEAPON, nKey ) ) {
-			iMap.onScreen = !iMap.onScreen;
+		if ( iMap->nDocID != -1 && zinput->IsBinded( GAME_WEAPON, nKey ) ) {
+			iMap->onScreen = !iMap->onScreen;
 		}
 
-		if ( iMap.onScreen ) {
+		if ( iMap->onScreen ) {
 			if ( zinput->IsBinded( GAME_STRAFELEFT, nKey ) ) {
-				if ( iMap.value > 0 ) {
+				if ( iMap->value > 0 ) {
 					if ( zinput->KeyPressed( KEY_LSHIFT ) ) {
-						iMap.value -= 10;
+						iMap->value -= 10;
 					} else {
-						iMap.value--;
+						iMap->value--;
 					}
 
-					if ( iMap.value < 0 ) {
-						iMap.value = 0;
+					if ( iMap->value < 0 ) {
+						iMap->value = 0;
 					}
-					zoptions->WriteInt( "ItemMap", "minValue", iMap.value, 30 );
-					iMap.UpdateItems();
+					zoptions->WriteInt( "ItemMap", "minValue", iMap->value, 30 );
+					iMap->UpdateItems();
 				}
 			}
 
 			if ( zinput->IsBinded( GAME_STRAFERIGHT, nKey ) ) {
 				if ( zinput->KeyPressed( KEY_LSHIFT ) ) {
-					iMap.value += 10;
+					iMap->value += 10;
 				} else {
-					iMap.value++;
+					iMap->value++;
 				}
-				zoptions->WriteInt( "ItemMap", "minValue", iMap.value, 30 );
-				iMap.UpdateItems();
+				zoptions->WriteInt( "ItemMap", "minValue", iMap->value, 30 );
+				iMap->UpdateItems();
 			}
 
 			if ( zinput->IsBinded( GAME_UP, nKey ) ) {
-				if ( iMap.category > 0 ) {
-					iMap.category--;
-					zoptions->WriteInt( "ItemMap", "category", iMap.category, 0 );
-					iMap.UpdateItems();
+				if ( iMap->category > 0 ) {
+					iMap->category--;
+					zoptions->WriteInt( "ItemMap", "category", iMap->category, 0 );
+					iMap->UpdateItems();
 				}
 			}
 
 			if ( zinput->IsBinded( GAME_DOWN, nKey ) ) {
-				if ( iMap.category < ItemMap::ItemCat::CATEGORYMAX - 1 ) {
-					iMap.category++;
-					zoptions->WriteInt( "ItemMap", "category", iMap.category, 0 );
-					iMap.UpdateItems();
+				if ( iMap->category < ItemMap::ItemCat::CATEGORYMAX - 1 ) {
+					iMap->category++;
+					zoptions->WriteInt( "ItemMap", "category", iMap->category, 0 );
+					iMap->UpdateItems();
 				}
 			}
 		}

@@ -7,17 +7,20 @@ namespace GOTHIC_ENGINE {
 	// Your code ...
 
 	void Game_Entry() {
+		iMap = new ItemMap();
 	}
 
 	void Game_Init() {
-		iMap.Init();
+		if ( iMap ) 
+			iMap->Init();
 	}
 
 	void Game_Exit() {
 	}
 
 	void Game_Loop() {
-		iMap.Loop();
+		if ( iMap )
+			iMap->Loop();
 	}
 
 	void Game_SaveBegin() {
