@@ -7,7 +7,7 @@ namespace GOTHIC_ENGINE {
 	// Your code ...
 
 	void Game_Entry() {
-		iMap = new ItemMap();
+		iMap = new ItemMap(); //FIXME почему не пашет?
 	}
 
 	void Game_Init() {
@@ -19,8 +19,13 @@ namespace GOTHIC_ENGINE {
 	}
 
 	void Game_Loop() {
-		if ( iMap )
+
+		if ( iMap ) {
 			iMap->Loop();
+		} else {
+			iMap = new ItemMap();
+			iMap->Init();
+		}
 	}
 
 	void Game_SaveBegin() {

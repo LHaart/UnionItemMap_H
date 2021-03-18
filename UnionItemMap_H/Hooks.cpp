@@ -15,16 +15,18 @@ namespace GOTHIC_ENGINE {
 		THISCALL( Ivk_oCDocumentManager_SetLevel )( nDocID, strLevel );
 		//cmd << "" << endl;
 
-		iMap->nDocID = nDocID;
-		iMap->strLevel = strLevel;
-		iMap->strLevel.Upper();
+		if ( iMap ) {
+			iMap->nDocID = nDocID;
+			iMap->strLevel = strLevel;
+			iMap->strLevel.Upper();
 
 
-		oCWorld* pGameWorld = dynamic_cast<oCWorld*> ( ogame->GetWorld() );
-		// если имя файла не равно текущему миру, очищаем переменные
-		if ( !( pGameWorld && iMap->strLevel == pGameWorld->GetWorldFilename() ) ) {
-			iMap->nDocID = -1;
-			iMap->strLevel = "";
+			oCWorld* pGameWorld = dynamic_cast<oCWorld*> ( ogame->GetWorld() );
+			// если имя файла не равно текущему миру, очищаем переменные
+			if ( !( pGameWorld && iMap->strLevel == pGameWorld->GetWorldFilename() ) ) {
+				iMap->nDocID = -1;
+				iMap->strLevel = "";
+			}
 		}
 	}
 
@@ -42,7 +44,7 @@ namespace GOTHIC_ENGINE {
 	void oCDocumentManager::Show_Union( int nDocID ) {
 		THISCALL( Ivk_oCDocumentManager_Show )( nDocID );
 		// включаем отображение наших дополнений
-		if ( iMap->nDocID == nDocID ) {
+		if ( iMap && iMap->nDocID == nDocID ) {
 			iMap->onScreen = TRUE;
 		}
 	}
@@ -63,7 +65,7 @@ namespace GOTHIC_ENGINE {
 		THISCALL( Ivk_zCViewDraw_Draw )( );
 
 		// ограничиваем вызов, т.к. zCViewDraw::Draw происходит не один раз за тик
-		if ( iMap->onScreen && !iMap->isDraw ) {
+		if ( iMap && iMap->onScreen && !iMap->isDraw ) {
 			iMap->Draw();
 			iMap->isDraw = TRUE;
 		}
@@ -96,16 +98,17 @@ namespace GOTHIC_ENGINE {
 				pPlayer->SetMovLock( FALSE );
 
 			this->SetEnableHandleEvent( FALSE );
-
-			iMap->Clear();
+			if ( iMap ) {
+				iMap->Clear();
+			}	
 		}
 
 		// включение/отключение отображения
-		if ( iMap->nDocID != -1 && zinput->IsBinded( GAME_WEAPON, nKey ) ) {
+		if ( iMap && iMap->nDocID != -1 && zinput->IsBinded( GAME_WEAPON, nKey ) ) {
 			iMap->onScreen = !iMap->onScreen;
 		}
 
-		if ( iMap->onScreen ) {
+		if ( iMap && iMap->onScreen ) {
 			if ( zinput->IsBinded( GAME_STRAFELEFT, nKey ) ) {
 				if ( iMap->value > 0 ) {
 					if ( zinput->KeyPressed( KEY_LSHIFT ) ) {

@@ -11,6 +11,13 @@ namespace GOTHIC_ENGINE {
 	//
 	void ItemMap::Init() {
 		nDocID = -1;
+		strLevel = "";
+		onScreen = 0;
+		update = 0;
+		currentCategory = 0;
+		pView = NULL;
+		pViewHelp = NULL;
+		isDraw = 0;
 		pixelSize.X = zoptions->ReadInt( "ItemMap", "textureSize", 7 );
 		pixelSize.Y = zoptions->ReadInt( "ItemMap", "textureSize", 7 );
 		value = zoptions->ReadInt( "ItemMap", "minValue", 30 );
