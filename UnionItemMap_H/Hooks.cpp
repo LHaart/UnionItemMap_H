@@ -20,10 +20,19 @@ namespace GOTHIC_ENGINE {
 			iMap->strLevel = strLevel;
 			iMap->strLevel.Upper();
 
-
 			oCWorld* pGameWorld = dynamic_cast<oCWorld*> ( ogame->GetWorld() );
 			// если имя файла не равно текущему миру, очищаем переменные
-			if ( !( pGameWorld && iMap->strLevel == pGameWorld->GetWorldFilename() ) ) {
+
+			zSTRING levelName = iMap->strLevel;
+			zSTRING worldLevelName = "";
+			levelName.Replace("/", "\\");
+
+			if(pGameWorld) {
+				worldLevelName = pGameWorld->GetWorldFilename();
+				worldLevelName.Replace("/", "\\");
+			}
+
+			if ( !( pGameWorld && levelName == worldLevelName ) ) {
 				iMap->nDocID = -1;
 				iMap->strLevel = "";
 			}
